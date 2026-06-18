@@ -8,8 +8,8 @@ services:
 
     environment:
       POSTGRES_DB: ecommerce
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: StrongPassword123
+      POSTGRES_USER: YOUR_DB_USER
+      POSTGRES_PASSWORD: YOUR_Db_PASSWORD
 
     ports:
       - "5432:5432"
@@ -18,7 +18,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: ["CMD-SHELL", "pg_isready -U YOUR_DB_USER"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -39,8 +39,8 @@ services:
     environment:
       DB_HOST: postgres
       DB_NAME: ecommerce
-      DB_USER: admin
-      DB_PASSWORD: StrongPassword123
+      DB_USER: YOUR_DB_USER
+      DB_PASSWORD: YOUR_DB_PASSWORD
       DB_PORT: 5432
 
     ports:
