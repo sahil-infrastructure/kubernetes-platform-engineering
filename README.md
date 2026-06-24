@@ -1,27 +1,30 @@
-# 🚀 E-Commerce Devops Engineering Project
+# 🚀 E-Commerce DevOps Engineering Project
 
 ## Overview
 
-This project demonstrates the deployment, monitoring, troubleshooting, and recovery of a containerized e-commerce platform using industry-standard Platform Engineering and DevOps practices.
+This project demonstrates the deployment, monitoring, troubleshooting, security scanning, alerting, and recovery of a containerized e-commerce platform using modern DevOps and Platform Engineering practices.
 
-The objective was to simulate a production-style environment and gain hands-on experience with:
+The goal was to simulate a production-style environment while gaining hands-on experience with:
 
-* Containerization
-* Service orchestration
-* Infrastructure monitoring
-* Observability
-* Incident response
-* Deployment rollback strategies
+* Docker
+* Docker Compose
+* PostgreSQL
+* Prometheus
+* Grafana
+* cAdvisor
+* Health Checks
+* Alerting
+* Vulnerability Scanning
+* Incident Response
+* Rollback Procedures
 
-The project follows operational workflows commonly used by DevOps Engineers, Platform Engineers, and Site Reliability Engineers (SREs).
+The project follows workflows commonly used by DevOps Engineers, Platform Engineers, SREs, and Cloud Engineers.
 
 ---
 
 # 🏗 Architecture
 
-![Architecture Diagram](screenshots/architecture-diagram.png)
-
-### Application Flow
+## Application Flow
 
 ```text
 User
@@ -33,7 +36,7 @@ Flask Application
 PostgreSQL Database
 ```
 
-### Monitoring Flow
+## Monitoring Flow
 
 ```text
 Application Containers
@@ -50,7 +53,7 @@ Application Containers
 
 ---
 
-# ⚙ Technology Stack
+# ⚙️ Technology Stack
 
 | Category              | Technology     |
 | --------------------- | -------------- |
@@ -61,8 +64,45 @@ Application Containers
 | Monitoring            | Prometheus     |
 | Container Metrics     | cAdvisor       |
 | Visualization         | Grafana        |
+| Security Scanning     | Trivy          |
 | Version Control       | Git            |
 | Repository Management | GitHub         |
+
+---
+
+# 📁 Repository Structure
+
+```text
+ecommerce-platform/
+│
+├── frontend/
+│
+├── backend/
+│   ├── Dockerfile
+│   ├── app.py
+│   └── requirements.txt
+│
+├── database/
+│
+├── monitoring/
+│   ├── prometheus/
+│   │    └── prometheus.yml
+│   │
+│   ├── grafana/
+│   │
+│   └── cadvisor/
+│
+├── compose/
+│   └── docker-compose.yml
+│
+├── docs/
+│
+├── scripts/
+│
+├── screenshots/
+│
+└── README.md
+```
 
 ---
 
@@ -71,116 +111,166 @@ Application Containers
 ## Application Layer
 
 * Flask-based REST API
-* Health Check Endpoint
 * PostgreSQL Integration
+* Health Check Endpoint
 * Containerized Deployment
 
 ## Containerization
 
 * Custom Docker Image
+* Multi-Container Deployment
 * Docker Compose Orchestration
 * Persistent Storage
-* Internal Container Networking
+* Internal Docker Networking
 
 ## Monitoring & Observability
 
-* Real-time Container Metrics
-* Resource Utilization Tracking
+* Real-Time Metrics Collection
 * Infrastructure Monitoring
+* Resource Utilization Tracking
+* Dashboard Visualization
 * Service Availability Monitoring
 
-## Dashboards
+## Security
 
-* CPU Utilization
-* Memory Utilization
-* Running Container Count
-* Filesystem Usage
-* Container Health Monitoring
+* Container Vulnerability Scanning
+* Trivy Image Analysis
+* Basic Secure Configuration Practices
 
-## Incident Management
+---
 
-* Failure Simulation
-* Service Recovery Validation
-* Version Rollback Testing
-* Health Verification
+# 🔄 Reliability Features
+
+## Health Checks
+
+PostgreSQL health checks ensure that dependent services start only when the database is available.
+
+```yaml
+healthcheck:
+  test: ["CMD-SHELL", "pg_isready -U admin"]
+  interval: 10s
+  timeout: 5s
+  retries: 5
+```
+
+### Why Health Checks Matter
+
+Without health checks, the backend may start before PostgreSQL is ready and fail during initialization.
+
+Health checks prevent startup race conditions and improve deployment reliability.
+
+---
+
+## Restart Policies
+
+All services use:
+
+```yaml
+restart: unless-stopped
+```
+
+Benefits:
+
+* Automatic recovery after crashes
+* Recovery after host reboot
+* Reduced manual intervention
+
+---
+
+## Dependency Management
+
+Backend startup is controlled using:
+
+```yaml
+depends_on:
+  postgres:
+    condition: service_healthy
+```
+
+This ensures:
+
+* PostgreSQL starts first
+* Backend waits for database readiness
+* Fewer deployment failures
 
 ---
 
 # 📊 Monitoring Stack
 
+## cAdvisor
+
+cAdvisor collects container-level metrics including:
+
+* CPU Usage
+* Memory Usage
+* Filesystem Usage
+* Network Statistics
+
+---
+
 ## Prometheus
 
-Prometheus is responsible for collecting and storing metrics from monitored services.
+Prometheus is responsible for:
 
-Features:
-
-* Metric Scraping
+* Metric Collection
 * Time-Series Storage
 * Service Monitoring
 * Availability Tracking
 
-### Prometheus Targets
-
-![Prometheus Targets](screenshots/prometheus-targets.png)
-
----
-
-## cAdvisor
-
-cAdvisor collects container-level resource metrics including:
-
-* CPU Usage
-* Memory Usage
-* Filesystem Utilization
-* Network Statistics
+Prometheus scrapes metrics from cAdvisor every 15 seconds.
 
 ---
 
 ## Grafana
 
-Grafana provides visualization and monitoring dashboards.
-
-### Grafana Dashboard
-
-![Grafana Dashboard](screenshots/grafana-dashboard.png)
+Grafana visualizes infrastructure metrics through dashboards.
 
 Monitored Metrics:
 
-* CPU Usage
-* Memory Usage
-* Container Health
-* Filesystem Utilization
+* Total Container Memory Usage
+* Total CPU Usage
 * Running Containers
+* Filesystem Usage
 
 ---
 
-# 🐳 Running Containers
+# 🚨 Alerting
 
-The application stack is deployed using Docker Compose.
+Grafana Alerting was configured to simulate production monitoring workflows.
 
-### Active Containers
+### Alert Example
 
-![Docker Containers](screenshots/docker-containers.png)
+Backend Availability Alert
 
-Components:
+Condition:
 
-* Flask Application
-* PostgreSQL
-* Prometheus
-* Grafana
-* cAdvisor
+```promql
+up{job="cadvisor"} < 1
+```
+
+Evaluation Period:
+
+```text
+1 minute
+```
+
+Purpose:
+
+* Detect service outages
+* Simulate incident response
+* Validate monitoring effectiveness
 
 ---
 
 # 🔍 Health Verification
 
-Verify application health:
+Verify backend health:
 
 ```bash
 curl http://localhost:5000/health
 ```
 
-Expected response:
+Expected Output:
 
 ```json
 {
@@ -190,59 +280,101 @@ Expected response:
 
 ---
 
-# 🚨 Incident Simulation & Rollback
+# 🔐 Security Scanning
 
-To simulate a real-world deployment failure, a faulty application version (v1.1.0) was intentionally deployed.
+Trivy was used to scan container images for vulnerabilities.
 
-## Failure Scenario
+Example:
 
-Observed behavior:
+```bash
+trivy image ecommerce-backend:1.0.0
+```
 
-* Application startup failure
-* Service unavailability
-* Container restart loop
-* Health check failure
+Benefits:
 
-## Recovery Procedure
-
-Rollback actions:
-
-1. Reverted deployment from v1.1.0 to v1.0.0
-2. Recreated application containers
-3. Validated service health
-4. Confirmed application availability
-5. Verified monitoring recovery
-
-## Outcome
-
-Service was successfully restored with minimal downtime using a controlled rollback procedure.
+* Detect vulnerable packages
+* Detect outdated dependencies
+* Improve container security posture
+* Shift security validation earlier in the deployment lifecycle
 
 ---
 
-# 📁 Repository Structure
+# 🔄 Incident Simulation & Rollback
+
+A deployment failure was intentionally simulated.
+
+## Faulty Release
+
+A broken image version was created:
 
 ```text
-ecommerce-platform/
-│
-├── backend/
-│   ├── app.py
-│   ├── Dockerfile
-│   ├── requirements.txt
-│
-├── compose/
-│   └── docker-compose.yml
-│
-├── monitoring/
-│   └── prometheus/
-│       └── prometheus.yml
-│
-├── screenshots/
-│   ├── architecture-diagram.png
-│   ├── docker-containers.png
-│   ├── prometheus-targets.png
-│   └── grafana-dashboard.png
-│
-└── README.md
+ecommerce-backend:1.1.0
+```
+
+Behavior:
+
+* Application startup failure
+* Container restart loop
+* Health check failure
+* Service unavailable
+
+---
+
+## Rollback Procedure
+
+The environment was recovered by rolling back to:
+
+```text
+ecommerce-backend:1.0.0
+```
+
+Actions Performed:
+
+1. Reverted image version
+2. Rebuilt application image
+3. Redeployed containers
+4. Validated service health
+5. Confirmed monitoring recovery
+
+Verification:
+
+```bash
+curl http://localhost:5000/health
+```
+
+Output:
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+This demonstrates a real-world deployment recovery workflow commonly used in production environments.
+
+---
+
+# 📸 Screenshots
+
+Add screenshots for:
+
+* Docker Compose Running Containers
+* Prometheus Targets
+* Grafana Dashboard
+* Grafana Alert Rule
+* Rollback Demonstration
+* Trivy Scan Results
+
+Example:
+
+```text
+screenshots/
+├── docker-compose-running.png
+├── prometheus-targets.png
+├── grafana-dashboard.png
+├── grafana-alert-rule.png
+├── rollback-demo.png
+└── trivy-scan.png
 ```
 
 ---
@@ -253,14 +385,17 @@ ecommerce-platform/
 * Docker Compose
 * Python Flask
 * PostgreSQL
-* Infrastructure Monitoring
 * Prometheus
 * Grafana
+* cAdvisor
+* Trivy
+* Infrastructure Monitoring
 * Container Observability
 * Incident Troubleshooting
+* Alerting
 * Deployment Rollback
-* Git Version Control
-* GitHub Collaboration
+* Git
+* GitHub
 
 ---
 
@@ -270,23 +405,23 @@ Through this project I gained practical experience in:
 
 * Building containerized applications
 * Managing multi-container deployments
-* Monitoring infrastructure and services
-* Implementing observability practices
-* Troubleshooting production-style incidents
-* Validating service recovery procedures
-* Understanding rollback strategies
+* Implementing health checks
+* Designing monitoring dashboards
+* Creating alerting rules
+* Troubleshooting deployment failures
+* Performing vulnerability scans
+* Recovering from faulty deployments
+* Implementing rollback strategies
 * Maintaining infrastructure through version control
 
 ---
 
 # 🔮 Future Enhancements
 
-Planned improvements:
-
 * Kubernetes Deployment
 * GitHub Actions CI/CD Pipeline
 * Terraform Infrastructure Provisioning
-* Alertmanager Integration
+* Prometheus Alertmanager
 * Centralized Logging
 * Blue-Green Deployments
 * Horizontal Scaling
@@ -296,8 +431,9 @@ Planned improvements:
 
 # 👨‍💻 Author
 
-**Sahil**
-Senior IT Support Engineer
-Aspiring Platform Engineer
+**Sahil Singh Chib**
 
-This project was created as part of my hands-on Platform Engineering and DevOps learning journey, focusing on real-world operational practices used in modern cloud-native environments.
+Senior IT Support Engineer
+Aspiring Devops Engineer
+
+This project was created as part of my hands-on Platform Engineering and DevOps learning journey, focusing on production-style operational practices used in modern cloud-native environments.
