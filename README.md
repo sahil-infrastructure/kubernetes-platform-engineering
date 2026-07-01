@@ -113,7 +113,7 @@ The application is deployed using Kubernetes manifests, monitored with the **Pro
 
 ```
 
-![Architecture](screenshots/architecture-diagram.png)
+![Architecture](kubernetes/screenshots/architecture-diagram.png)
 
 ```
 
@@ -435,7 +435,7 @@ Image versioning used throughout the project:
 ## Docker Hub Screenshot
 
 ```markdown
-![Docker Hub](screenshots/dockerhub-image.png)
+![Docker Hub](kubernetes/screenshots/dockerhub-image.png)
 ```
 
 ---
@@ -465,7 +465,7 @@ This demonstrates a production-style Continuous Integration workflow.
 ## GitHub Actions Pipeline
 
 ```markdown
-![GitHub Actions](screenshots/github-actions-success.png)
+![GitHub Actions](kubernetes/screenshots/Github-actions-success.png)
 ```
 
 ---
@@ -511,7 +511,7 @@ This ensures the Kubernetes cluster always matches the desired state stored in G
 ## Argo CD Dashboard
 
 ```markdown
-![ArgoCD](screenshots/argocd-dashboard.png)
+![Argo CD](kubernetes/screenshots/Argocd-dashboard.png)
 ```
 
 ---
@@ -650,7 +650,7 @@ helm install monitoring prometheus-community/kube-prometheus-stack
 ## Helm Release Screenshot
 
 ```markdown
-![Helm Releases](screenshots/helm-releases.png)
+![Helm](kubernetes/screenshots/Helm-releases.png)
 ```
 
 ---
@@ -687,7 +687,7 @@ Metrics collected include:
 The Prometheus Targets page verifies that all monitoring endpoints are healthy and actively being scraped.
 
 ```markdown
-![Prometheus Targets](screenshots/prometheus-targets.png)
+![Prometheus](kubernetes/screenshots/prometheus-targets.png)
 ```
 
 ---
@@ -715,7 +715,7 @@ Grafana transforms raw metrics into interactive dashboards for operational visib
 ## Grafana Dashboard
 
 ```markdown
-![Grafana Dashboard](screenshots/grafana-dashboard.png)
+![Grafana](kubernetes/screenshots/grafana-dashboard.png)
 ```
 
 ---
@@ -1437,7 +1437,7 @@ https://github.com/sahil-infrastructure
 
 **LinkedIn**
 
-> Replace this with your LinkedIn profile URL.
+> https://www.linkedin.com/in/sahil-s-1270581a2/
 
 ---
 
