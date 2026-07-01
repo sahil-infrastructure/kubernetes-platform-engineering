@@ -1,439 +1,247 @@
 # 🚀 Kubernetes Platform Engineering Project
 
-## Overview
+> Production-ready Flask application deployed on Kubernetes using Helm, GitHub Actions, Argo CD (GitOps), Prometheus, and Grafana.
 
-This project demonstrates the deployment, monitoring, troubleshooting, security scanning, alerting, and recovery of a containerized e-commerce platform using modern DevOps and Platform Engineering practices.
-
-The objective was to simulate a production-style environment and gain hands-on experience with:
-
-* Docker
-* Docker Compose
-* PostgreSQL
-* Prometheus
-* Grafana
-* cAdvisor
-* Trivy Security Scanning
-* Health Checks
-* Alerting
-* Incident Response
-* Deployment Rollback
-
-The project follows workflows commonly used by DevOps Engineers, Platform Engineers, Site Reliability Engineers (SREs), and Cloud Engineers.
+![Kubernetes](https://img.shields.io/badge/Kubernetes-1.34-blue)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+![Helm](https://img.shields.io/badge/Helm-3.x-0f1689)
+![ArgoCD](https://img.shields.io/badge/GitOps-ArgoCD-orange)
+![Prometheus](https://img.shields.io/badge/Monitoring-Prometheus-red)
+![Grafana](https://img.shields.io/badge/Dashboards-Grafana-F46800)
 
 ---
 
-# 🏗 Architecture
+# Project Overview
 
-![Architecture Diagram](screenshots/architecture-diagram.png)
+This repository demonstrates a complete Platform Engineering workflow from containerization to Kubernetes deployment and GitOps.
 
-## Application Flow
+## Features
+
+- Dockerized Flask application
+- Kubernetes Deployments and Services
+- ConfigMaps & Secrets
+- Liveness & Readiness Probes
+- Rolling Updates
+- Rollback Demonstration
+- Persistent Volumes
+- Helm Charts
+- GitHub Actions CI/CD
+- Argo CD GitOps
+- Prometheus Monitoring
+- Grafana Dashboards
+
+---
+
+# Architecture
 
 ```text
-User
- │
- ▼
-Flask Application
- │
- ▼
-PostgreSQL Database
+Developer
+    │
+Git Push
+    │
+GitHub
+    │
+GitHub Actions
+    │
+Docker Hub
+    │
+Argo CD
+    │
+Kubernetes Cluster
+ ├── Flask Pods
+ ├── PostgreSQL
+ ├── Services
+ ├── ConfigMaps
+ ├── Secrets
+ ├── PV/PVC
+ ├── Prometheus
+ └── Grafana
 ```
 
-## Monitoring Flow
-
-```text
-Application Containers
-        │
-        ▼
-     cAdvisor
-        │
-        ▼
-    Prometheus
-        │
-        ▼
-      Grafana
-```
+You can also replace this with a Mermaid diagram if preferred.
 
 ---
 
-# ⚙️ Technology Stack
-
-| Category           | Technology     |
-| ------------------ | -------------- |
-| Application        | Python Flask   |
-| Database           | PostgreSQL     |
-| Containerization   | Docker         |
-| Orchestration      | Docker Compose |
-| Monitoring         | Prometheus     |
-| Metrics Collection | cAdvisor       |
-| Visualization      | Grafana        |
-| Security Scanning  | Trivy          |
-| Version Control    | Git            |
-| Repository Hosting | GitHub         |
-
----
-
-# 📁 Repository Structure
+# Repository Structure
 
 ```text
-ecommerce-platform/
-│
+.
 ├── backend/
-│   ├── Dockerfile
-│   ├── app.py
-│   ├── requirements.txt
-│   └── README.md
-│
-├── compose/
-│   └── docker-compose.yml
-│
+├── kubernetes/
+├── helm/
 ├── monitoring/
-│   └── prometheus/
-│       └── prometheus.yml
-│
-├── screenshots/
-│   ├── application-running.png
-│   ├── architecture-diagram.png
-│   ├── docker-containers.png
-│   ├── grafana-dashboard.png
-│   └── prometheus-targets.png
-│
+├── .github/workflows/
+├── Screenshots/
 └── README.md
 ```
 
 ---
 
-# ✨ Key Features
+# Technology Stack
 
-## Application Layer
-
-* Flask-based REST API
-* PostgreSQL Integration
-* Health Check Endpoint
-* Containerized Deployment
-
-## Containerization
-
-* Custom Docker Image
-* Docker Compose Orchestration
-* Internal Container Networking
-* Persistent Database Storage
-
-## Monitoring & Observability
-
-* Real-Time Infrastructure Monitoring
-* Resource Utilization Tracking
-* Container-Level Metrics
-* Dashboard Visualization
-* Service Availability Monitoring
-
-## Security
-
-* Container Vulnerability Scanning
-* Trivy Image Analysis
-* Security Awareness Validation
+| Category | Tools |
+|-----------|-------|
+| Containers | Docker |
+| Orchestration | Kubernetes |
+| Package Manager | Helm |
+| CI/CD | GitHub Actions |
+| GitOps | Argo CD |
+| Monitoring | Prometheus |
+| Visualization | Grafana |
 
 ---
 
-# 🔄 Reliability Features
+# Screenshots
 
-## Health Checks
-
-PostgreSQL health checks were implemented to ensure dependent services start only after the database becomes available.
-
-```yaml
-healthcheck:
-  test: ["CMD-SHELL", "pg_isready -U admin"]
-  interval: 10s
-  timeout: 5s
-  retries: 5
-```
-
-### Why Health Checks Matter
-
-Without health checks, the backend application may start before PostgreSQL is ready and fail during initialization.
-
-Health checks help prevent startup race conditions and improve deployment reliability.
-
----
-
-## Restart Policies
-
-All containers use:
-
-```yaml
-restart: unless-stopped
-```
-
-Benefits:
-
-* Automatic recovery after container crashes
-* Recovery after host reboot
-* Reduced manual intervention
-
----
-
-## Dependency Management
-
-Backend startup is controlled using:
-
-```yaml
-depends_on:
-  postgres:
-    condition: service_healthy
-```
-
-This ensures:
-
-* PostgreSQL starts first
-* Backend waits for database readiness
-* Fewer deployment failures
-
----
-
-# 📊 Monitoring Stack
-
-## cAdvisor
-
-cAdvisor collects container-level resource metrics including:
-
-* CPU Usage
-* Memory Usage
-* Filesystem Usage
-* Network Statistics
-
----
-
-## Prometheus
-
-Prometheus is responsible for:
-
-* Metric Collection
-* Time-Series Storage
-* Service Monitoring
-* Availability Tracking
-
-Prometheus scrapes metrics from cAdvisor every 15 seconds.
-
-### Prometheus Targets
-
-![Prometheus Targets](screenshots/prometheus-targets.png)
-
----
-
-## Grafana
-
-Grafana provides dashboard visualization and monitoring capabilities.
-
-### Grafana Dashboard
-
-![Grafana Dashboard](screenshots/grafana-dashboard.png)
-
-Monitored Metrics:
-
-* Total Container Memory Usage
-* Total CPU Usage
-* Running Containers
-* Filesystem Usage
-
----
-
-# 🐳 Running Containers
-
-The complete application stack is deployed using Docker Compose.
-
-### Active Containers
-
-![Docker Containers](screenshots/docker-containers.png)
-
-Components:
-
-* Flask Application
-* PostgreSQL
-* Prometheus
-* Grafana
-* cAdvisor
-
----
-
-# 🚨 Alerting
-
-Grafana alerting was configured to simulate production monitoring workflows.
-
-### Backend Availability Alert
-
-Condition:
-
-```promql
-up{job="cadvisor"} < 1
-```
-
-Evaluation Period:
+Place screenshots inside:
 
 ```text
-1 minute
+Screenshots/
 ```
-
-Purpose:
-
-* Detect service outages
-* Simulate incident response workflows
-* Validate monitoring effectiveness
-
----
-
-# 🔍 Application Verification
-
-### Application Running
-
-![Application Running](screenshots/application-running.png)
-
-Verify backend health:
-
-```bash
-curl http://localhost:5000/health
-```
-
-Expected Output:
-
-```json
-{
-  "status": "healthy"
-}
-```
-
----
-
-# 🔐 Security Scanning
-
-Trivy was used to scan container images for vulnerabilities.
 
 Example:
 
-```bash
-trivy image ecommerce-backend:1.0.0
+```markdown
+![Deployment](Screenshots/deployment.png)
+
+![Grafana](Screenshots/grafana-dashboard.png)
+
+![ArgoCD](Screenshots/argocd.png)
 ```
-
-Benefits:
-
-* Detect vulnerable packages
-* Detect outdated dependencies
-* Improve container security posture
-* Shift security validation earlier in the deployment lifecycle
 
 ---
 
-# 🔄 Incident Simulation & Rollback
-
-A deployment failure was intentionally simulated to demonstrate rollback procedures.
-
-## Faulty Release
-
-A broken image version was created:
-
-```text
-ecommerce-backend:1.1.0
-```
-
-Behavior:
-
-* Application startup failure
-* Container restart loop
-* Service unavailable
-* Failed health checks
-
----
-
-## Rollback Procedure
-
-The deployment was recovered by rolling back to the previously stable version:
-
-```text
-ecommerce-backend:1.0.0
-```
-
-Actions Performed:
-
-1. Reverted image version
-2. Rebuilt application image
-3. Redeployed containers
-4. Verified container health
-5. Confirmed application availability
-6. Validated monitoring recovery
-
-Verification:
+# Deployment Guide
 
 ```bash
-curl http://localhost:5000/health
+docker build -t your-image .
+docker push your-image
+
+kubectl apply -f kubernetes/
+
+helm install ecommerce ./helm
+
+kubectl get all
 ```
 
-Response:
+---
 
-```json
-{
-  "status": "healthy"
-}
+# GitHub Actions
+
+Pipeline stages:
+
+1. Checkout
+2. Build Docker Image
+3. Push Docker Image
+4. Update Kubernetes manifests
+5. GitOps sync through Argo CD
+
+---
+
+# Helm
+
+Install
+
+```bash
+helm install ecommerce ./helm
 ```
 
-This demonstrates a real-world deployment recovery workflow commonly used in production environments.
+Upgrade
+
+```bash
+helm upgrade ecommerce ./helm
+```
+
+Rollback
+
+```bash
+helm rollback ecommerce 1
+```
 
 ---
 
-# 🎯 Skills Demonstrated
+# GitOps with Argo CD
 
-* Docker
-* Docker Compose
-* Python Flask
-* PostgreSQL
-* Prometheus
-* Grafana
-* cAdvisor
-* Trivy
-* Infrastructure Monitoring
-* Container Observability
-* Incident Troubleshooting
-* Alerting
-* Deployment Rollback
-* Git
-* GitHub
+Argo CD continuously watches this repository.
+
+Whenever a change is pushed:
+
+- Detects drift
+- Syncs cluster
+- Applies latest manifests
 
 ---
 
-# 📚 Learning Outcomes
+# Monitoring
 
-Through this project I gained practical experience in:
+Prometheus collects metrics from the cluster.
 
-* Building containerized applications
-* Managing multi-container deployments
-* Implementing health checks
-* Designing monitoring dashboards
-* Creating alerting rules
-* Performing vulnerability scans
-* Troubleshooting deployment failures
-* Recovering from faulty deployments
-* Implementing rollback strategies
-* Maintaining infrastructure through version control
+Grafana visualizes:
+
+- CPU Usage
+- Memory Usage
+- Pod Health
+- Container Restarts
+- Node Metrics
 
 ---
 
-# 🔮 Future Enhancements
+# Rolling Updates
 
-* Kubernetes Deployment
-* GitHub Actions CI/CD Pipeline
-* Terraform Infrastructure Provisioning
-* Prometheus Alertmanager
-* Centralized Logging
-* Blue-Green Deployments
-* Horizontal Scaling
-* Automated Rollback Workflows
+```bash
+kubectl rollout status deployment/ecommerce
+```
 
 ---
 
-# 👨‍💻 Author
+# Rollback Demonstration
 
-**Sahil**
+Deploy new image
 
-Senior IT Support Engineer
-Aspiring Devops Engineer
+```bash
+kubectl set image deployment/ecommerce backend=image:v2
+```
 
-This project was created as part of my hands-on Platform Engineering and DevOps learning journey, focusing on real-world operational practices used in modern cloud-native environments.
+Rollback
 
+```bash
+kubectl rollout undo deployment/ecommerce
+```
+
+---
+
+# Lessons Learned
+
+- Kubernetes resource management
+- Production deployments
+- GitOps workflows
+- CI/CD automation
+- Monitoring and observability
+- High availability concepts
+
+---
+
+# Future Improvements
+
+- Horizontal Pod Autoscaler
+- Service Mesh
+- Terraform Infrastructure
+- Multi-cluster deployment
+- External Secrets
+- Loki Logging
+
+---
+
+# Author
+
+## Sahil Singh Chib
+
+**Platform Engineer**
+
+Passionate about Kubernetes, Cloud Infrastructure, DevOps, GitOps, Automation, and Platform Engineering.
+
+Connect on LinkedIn and GitHub.
+
+---
+
+⭐ If you found this project useful, consider giving it a star.
