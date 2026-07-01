@@ -1,4 +1,4 @@
-# 🚀 E-Commerce DevOps Engineering Project
+# 🚀 Kubernetes Platform Engineering Project
 
 ## Overview
 
