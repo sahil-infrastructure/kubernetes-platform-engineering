@@ -21,7 +21,7 @@ spec:
       containers:
       -   name: backend
 
-          image: sahilsinghchib/ecommerce-backend:1.0.3
+          image: sahilsinghchib/ecommerce-backend:1.0.4
 
           envFrom:
           - configMapRef:
