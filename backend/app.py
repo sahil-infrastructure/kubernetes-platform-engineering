@@ -6,6 +6,12 @@ import os
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return jsonify({
+        "message": "Welcome to the Kubernetes E-Commerce Platform!",
+        "status": "running"
+    })
 
 @app.route("/health")
 def health():

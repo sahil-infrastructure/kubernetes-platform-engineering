@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ecommerce-backend
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ecommerce-backend
+
+  template:
+
+    metadata:
+      labels:
+        app: ecommerce-backend
+
+    spec:
+      containers:
+      -   name: backend
+
+          image: sahilsinghchib/ecommerce-backend:1.0.4
+
+          envFrom:
+          - configMapRef:
+              name: ecommerce-config
+
+          - secretRef:
+              name: ecommerce-secret
+
+          ports:
+          -  containerPort: 5000
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
