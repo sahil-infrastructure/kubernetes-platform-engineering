@@ -109,12 +109,11 @@ The application is deployed using Kubernetes manifests, monitored with the **Pro
 
 ## 📷 Architecture Diagram
 
-> Replace with your latest architecture screenshot.
+> Latest platform architecture
 
-```markdown
 ![Architecture Diagram](kubernetes/screenshots/architecture-diagram.png)
 
-```
+
 ---
 
 # ⭐ Skills Demonstrated
