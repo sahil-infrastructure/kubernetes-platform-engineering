@@ -431,9 +431,8 @@ Image versioning used throughout the project:
 
 ## Docker Hub Screenshot
 
-```markdown
-![Docker Hub](./kubernetes/screenshots/dockerhub-image.png)
-```
+
+![Docker Hub](kubernetes/screenshots/dockerhub-image.png)
 
 ---
 
@@ -461,9 +460,7 @@ This demonstrates a production-style Continuous Integration workflow.
 
 ## GitHub Actions Pipeline
 
-```markdown
-![GitHub Actions](./kubernetes/screenshots/Github-actions-success.png)
-```
+![GitHub Actions](kubernetes/screenshots/Github-actions-success.png)
 
 ---
 
@@ -507,9 +504,9 @@ This ensures the Kubernetes cluster always matches the desired state stored in G
 
 ## Argo CD Dashboard
 
-```markdown
-![Argo CD](./kubernetes/screenshots/Argocd-dashboard.png)
-```
+
+![Argo CD](kubernetes/screenshots/Argocd-dashboard.png)
+
 
 ---
 
