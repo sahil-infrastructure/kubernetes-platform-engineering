@@ -643,9 +643,8 @@ helm install monitoring prometheus-community/kube-prometheus-stack
 
 ## Helm Release Screenshot
 
-```markdown
-![Helm](./kubernetes/screenshots/Helm-releases.png)
-```
+
+![Helm](kubernetes/screenshots/Helm-releases.png)
 
 ---
 
@@ -680,9 +679,8 @@ Metrics collected include:
 
 The Prometheus Targets page verifies that all monitoring endpoints are healthy and actively being scraped.
 
-```markdown
-![Prometheus](./kubernetes/screenshots/prometheus-targets.png)
-```
+
+![Prometheus](kubernetes/screenshots/prometheus-targets.png)
 
 ---
 
@@ -708,9 +706,9 @@ Grafana transforms raw metrics into interactive dashboards for operational visib
 
 ## Grafana Dashboard
 
-```markdown
-![Grafana](./kubernetes/screenshots/grafana-dashboard.png)
-```
+
+![Grafana](kubernetes/screenshots/grafana-dashboard.png)
+
 
 ---
 
