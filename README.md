@@ -111,9 +111,8 @@ The application is deployed using Kubernetes manifests, monitored with the **Pro
 
 > Replace with your latest architecture screenshot.
 
-```
-
-<img src="kubernetes/screenshots/architecture-diagram.png" width="1000">
+```markdown
+![Architecture Diagram](kubernetes/screenshots/architecture-diagram.png)
 
 ```
 ---
