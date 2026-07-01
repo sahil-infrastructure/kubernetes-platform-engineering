@@ -113,7 +113,7 @@ The application is deployed using Kubernetes manifests, monitored with the **Pro
 
 ```
 
-![Architecture](./kubernetes/screenshots/architecture-diagram.png)
+<img src="kubernetes/screenshots/architecture-diagram.png" width="1000">
 
 ```
 
