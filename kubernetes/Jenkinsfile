@@ -2,11 +2,19 @@ pipeline {
 
     agent any
 
+    environment {
+        PROJECT_NAME = "Kubernetes Platform Engineering"
+        IMAGE_NAME = "sahilsinghchib/ecommerce-backend"
+        IMAGE_TAG = "1.0.4"
+    }
+
     stages {
 
-        stage('Clone Complete') {
+        stage('Environment Variables') {
             steps {
-                echo 'Repository cloned successfully.'
+                echo "Project: ${PROJECT_NAME}"
+                sh 'echo Docker Image: $IMAGE_NAME'
+                sh 'echo Docker Tag: $IMAGE_TAG'
             }
         }
 
@@ -14,12 +22,6 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -la'
-            }
-        }
-
-        stage('Build Verification') {
-            steps {
-                echo 'Pipeline is executing from Jenkinsfile.'
             }
         }
 
