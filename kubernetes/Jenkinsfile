@@ -1,0 +1,28 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Clone Complete') {
+            steps {
+                echo 'Repository cloned successfully.'
+            }
+        }
+
+        stage('Workspace Info') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
+
+        stage('Build Verification') {
+            steps {
+                echo 'Pipeline is executing from Jenkinsfile.'
+            }
+        }
+
+    }
+
+}
