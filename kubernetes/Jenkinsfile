@@ -5,21 +5,34 @@ pipeline {
     environment {
         IMAGE_NAME = "sahilsinghchib/ecommerce-backend"
         IMAGE_TAG = "${BUILD_NUMBER}"
+
+        EC2_HOST = "13.232.12.111"
+        EC2_USER = "ubuntu"
     }
 
     stages {
 
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Verify Workspace') {
             steps {
-                sh 'pwd'
-                sh 'ls -la'
+                sh '''
+                pwd
+                ls -la
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 dir('backend') {
-                    sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                    sh '''
+                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                    '''
                 }
             }
         }
@@ -33,27 +46,80 @@ pipeline {
                         passwordVariable: 'DOCKER_PASS'
                     )
                 ]) {
+
                     sh '''
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    echo "$DOCKER_PASS" | docker login \
+                    -u "$DOCKER_USER" \
+                    --password-stdin
                     '''
                 }
             }
         }
 
-        stage('Push Image') {
+        stage('Push Docker Image') {
             steps {
-                sh 'docker push ${IMAGE_NAME}:${IMAGE_TAG}'
+                sh '''
+                docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                '''
+            }
+        }
+
+        stage('Deploy to AWS EC2') {
+            steps {
+
+                sshagent(credentials: ['aws-ec2-key']) {
+
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
+
+                    docker pull ${IMAGE_NAME}:${IMAGE_TAG}
+
+                    docker stop ecommerce-backend || true
+
+                    docker rm ecommerce-backend || true
+
+                    docker run -d \
+                        --name ecommerce-backend \
+                        -p 80:5000 \
+                        --restart unless-stopped \
+                        ${IMAGE_NAME}:${IMAGE_TAG}
+
+                    docker image prune -f
+
+                    EOF
+                    '''
+                }
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+
+                sshagent(credentials: ['aws-ec2-key']) {
+
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} \
+                    "curl -f http://localhost/health"
+                    '''
+                }
             }
         }
     }
 
     post {
+
         success {
-            echo "Docker image pushed successfully."
+            echo "========================================"
+            echo "Deployment completed successfully."
+            echo "Docker image: ${IMAGE_NAME}:${IMAGE_TAG}"
+            echo "========================================"
         }
 
         failure {
-            echo "Pipeline failed."
+            echo "========================================"
+            echo "Pipeline Failed!"
+            echo "Check Console Output."
+            echo "========================================"
         }
     }
 }
